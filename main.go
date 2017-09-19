@@ -15,7 +15,6 @@ import (
 var pretty = flag.Bool("pretty", false, "pretty print output")
 var interval = flag.String("interval", "30s", "sync interval")
 var outputPath = flag.String("dir", "/opt/dewey/catalogs", "catalog file output directory")
-var configFile = flag.String("config", "/opt/dewey/config.yaml", "config file location")
 
 func init() {
 	logger, err := spec.NewStandardLogger()
@@ -24,7 +23,11 @@ func init() {
 	}
 	zap.ReplaceGlobals(logger)
 
-	viper.SetConfigFile("./config.yaml")
+	viper.SetConfigName("config")
+	viper.AddConfigPath("/opt/dewey/")
+	viper.AddConfigPath("$HOME/.dewey")
+	viper.AddConfigPath(".")
+	viper.SetConfigType("yaml")
 	viper.BindPFlags(flag.CommandLine)
 }
 

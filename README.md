@@ -9,7 +9,7 @@ Dewey is an application for syncing a list of Docker repositories for registries
 
 ## Configuration
 
-Dewey supports a config file specified by the `--config` option. The default path is at `/opt/dewey/config.yaml` The format is as follows:
+The default path is at `/opt/dewey/config.yaml`, then `$HOME/.dewey`, then `.`. The format is as follows:
 
 ```yaml
 registries:
@@ -47,7 +47,6 @@ The API address for your service can differ from registry to registry. Dockerhub
 ```
 $ ./dewey --help
 Usage of ./dewey:
-      --config string     config file location (default "/opt/dewey/config.yaml")
       --dir string        catalog file output directory (default "/opt/dewey/catalogs")
       --interval string   sync interval (default "30s")
       --pretty            pretty print output
