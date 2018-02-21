@@ -62,6 +62,13 @@ dockerRegistry:
 
 With the above configuration, Dewey will output a list of all repositories available for the `jenkins` and `selenium` orgs on Dockerhub. If new repositories are ever added, Dewey will pick them  up and include them in the list. Clouddriver will use this list each time it caches image tags to make sure it's caching the right repositories.
 
+## Usage
+
+```bash
+$ mkdir catalogs
+$ docker run --rm -v $(pwd)/catalogs:/opt/dewey/catalogs -v $(pwd)/config.yaml:/opt/dewey/config.yaml dewey:0.0.3
+```
+
 ## Configuration oddities
 
 Since these registries do not support `v2/_catalog`, we can't utilize Docker Registrys APIs to get our final result. This means that we need to go through application APIs to get our data.
