@@ -30,6 +30,38 @@ registries:
       - jenkins
 ```
 
+## Usage with Spinnaker
+ 
+To use `dewey` with Spinnaker, it will need to be running as a sidecar of Clouddriver. If you're deploying on Kubernetes, you'll want to run dewey in the same Pod as Clouddriver with a shared `emptyDir` volume between them. If you're running on EC2, it may be enough to have it running on the same host.
+
+To configure Clouddriver, use the `catalogFile` option instead of listing repositories when configuring your Docker accounts. Note, this option is _not_ exposed in Halyard at this time.
+
+```yaml
+# Dewey config
+registries:
+  - name: dockerhub
+    kind: dockerhub
+    repositories:
+      - gliderlabs/consul-server          
+    orgs:
+      - selenium
+      - jenkins
+```
+
+
+```yaml
+# Clouddriver config
+# simple Dockerhub config with no private orgs
+dockerRegistry:
+  enabled: true
+  accounts:
+    - name: dockerhub
+      address: https://index.dockerhub.io
+      catalogFile: /opt/dewey/catalogs/dockerhub.json
+```
+
+With the above configuration, Dewey will output a list of all repositories available for the `jenkins` and `selenium` orgs on Dockerhub. If new repositories are ever added, Dewey will pick them  up and include them in the list. Clouddriver will use this list each time it caches image tags to make sure it's caching the right repositories.
+
 ## Configuration oddities
 
 Since these registries do not support `v2/_catalog`, we can't utilize Docker Registrys APIs to get our final result. This means that we need to go through application APIs to get our data.
